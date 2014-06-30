@@ -5,7 +5,7 @@
  * the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- *	
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,7 +17,7 @@
 		<Require feature="views" />
 		<Require feature="locked-domain" />
 	</ModulePrefs>
-	<Content type="html"><![CDATA[     
+	<Content type="html"><![CDATA[
 
 <html>
 <style type="text/css">
@@ -26,24 +26,68 @@
   border-radius: 3px;
   -moz-border-radius: 3px;
   background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
-  background: -moz-linear-gradient(top, #fff, #ddd);  
+  background: -moz-linear-gradient(top, #fff, #ddd);
   border: 1px solid #bbb;
 }
 
 .button:active {
-	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#333)); 
+	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#333));
 	background: -moz-linear-gradient(bottom, #ddd, #aaa); }
 
 -->
 </style>
 <body>
+<canvas id="canvas" width="400" height="400">
+</canvas>
+  <script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    function getMousePos(canvas, event){
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+    }
 
+    function draw(oldposition, canvas, event, context) {
+      var mousepos = getMousePos(canvas, event);
+      context.beginPath();
+      context.moveTo(mousepos.x, mousepos.y);
+      context.lineTo(oldposition.x, oldposition.y);
+      context.stroke();
+      return mousepos;
+    }
+    var oldposition = null;
+    var drawing = false;
+
+    canvas.addEventListener("mousedown", function(event) {
+      oldposition = getMousePos(canvas, event);
+      drawing = true;
+    })
+    canvas.addEventListener("mouseup", function(event) {
+      drawing = false;
+    })
+    canvas.addEventListener("mouseout", function(event) {
+      drawing = false;
+    })
+
+    canvas.addEventListener("mousemove", function(event) {
+      if (oldposition == null) {
+        oldposition = getMousePos;
+      }
+      if (drawing == true) {
+        oldposition = draw(oldposition, canvas, event, context);
+      }
+    })
+  </script>
+  <p id="print"></p>
 <script src="//plus.google.com/hangouts/_/api/v1/hangout.js"></script>
 
 <h3>Simple Hangout App</h3>
 
 <p>
-<input class="button" type="button" value="Show participants!" id="showParticipants" 
+<input class="button" type="button" value="Show participants!" id="showParticipants"
     style="visibility:hidden;"
     onClick="showParticipants()"/>
 </p>
@@ -77,7 +121,7 @@ function showParticipants() {
 }
 
 function init() {
-  // When API is ready...                                                         
+  // When API is ready...
   gapi.hangout.onApiReady.add(
       function(eventObj) {
         if (eventObj.isApiReady) {
@@ -87,7 +131,7 @@ function init() {
       });
 }
 
-// Wait for gadget to load.                                                       
+// Wait for gadget to load.
 gadgets.util.registerOnLoadHandler(init);
 </script>
 </body>
