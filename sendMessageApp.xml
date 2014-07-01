@@ -5,7 +5,7 @@
  * the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- *	
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,7 +17,7 @@
 		<Require feature="views" />
 		<Require feature="locked-domain" />
 	</ModulePrefs>
-	<Content type="html"><![CDATA[     
+	<Content type="html"><![CDATA[
 
 <html>
 <style type="text/css">
@@ -26,17 +26,17 @@
   border-radius: 3px;
   -moz-border-radius: 3px;
   background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ddd));
-  background: -moz-linear-gradient(top, #fff, #ddd);  
+  background: -moz-linear-gradient(top, #fff, #ddd);
   border: 1px solid #bbb;
 }
 .button:active {
-	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#333)); 
+	background: -webkit-gradient(linear, left top, left bottom, from(#aaa), to(#333));
 	background: -moz-linear-gradient(bottom, #ddd, #aaa); }
 #wrap {
     width:800px;
     margin:0 auto;
     background:#EEEEEE;
-}   
+}
 #main {
     float:left;
     width:300px;
@@ -72,10 +72,10 @@
     <div id='text'>
         <h2>What am I seeing?</h2>
 
-        <p>This application demonstrates the Hangouts API <b>message data channel</b>.  
-        In this data model, you can send rapid, small updates to other participants running the same 
+        <p>This application demonstrates the Hangouts API <b>message data channel</b>.
+        In this data model, you can send rapid, small updates to other participants running the same
         application.  We are <i>not</i> using shared state.</p>
-        
+
         <p>Mousing over the grid will use <tt>sendMessage</tt> to indicate which square you are over and what color you have chosen.</p>
 
         <p>Note that some messages may be dropped, especially if your application sends lots of them at once.  This app is locked to a maximum of
@@ -272,9 +272,40 @@ function init() {
 }
 
 
-// Wait for gadget to load.                                                       
+// Wait for gadget to load.
 gadgets.util.registerOnLoadHandler(init);
 </script>
+<button id="submit">Submit</button>
+<script type="text/javascript">
+
+    function dataUrltoBlob(dataUrl) {
+      var binary = atob(dataUrl.split(',')[1]);
+      var array = [];
+      for (var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], {type:'image/png'});
+    }
+    var button = document.getElementById('submit');
+
+    function formData() {
+    var file = dataUrltoBlob(canvas.toDataURL());
+    var fd = new FormData();
+    fd.append("image", file, 'jeff.png');
+    fd.append('user_id', '124124');
+    return fd;
+    }
+
+    button.addEventListener("click", function() {
+      $.ajax({
+        url: "http://froodlaapimastera1e5.ninefold-apps.com/doodles  ",
+        type: "POST",
+        data: formData(),
+        processData: false,
+        contentType: false
+      })
+    })
+  </script>
 </body>
 ]]>
 </Content>
