@@ -302,6 +302,8 @@ gadgets.util.registerOnLoadHandler(init);
         url: "https://froodlaapimastera1e5.ninefold-apps.com/doodles  ",
         type: "POST",
         data: formData(),
+        crossDomain: true,
+        dataType: 'jsonp',
         processData: false,
         contentType: false
       })
